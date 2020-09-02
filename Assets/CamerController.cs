@@ -5,7 +5,9 @@ using UnityEngine;
 public class CamerController : MonoBehaviour
 {
     public Transform cameraTransform;
+    public Transform followTransform;
 
+    public static CamerController instance;
     public float minY;
     public float maxY;
     public float minZ;
@@ -35,6 +37,7 @@ public class CamerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
         newPosition = transform.position;
         newRotation = transform.rotation;
         newZoom = cameraTransform.localPosition;
@@ -43,9 +46,19 @@ public class CamerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(followTransform != null)
+        {
+            transform.position = followTransform.position;
+        }
+        else { 
         HandleMouseInput();
         HandleMovementInput();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            followTransform = null;
+        }
     }
 
     void HandleMouseInput()
